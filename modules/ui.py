@@ -1121,6 +1121,10 @@ def create_ui():
         shared.tab_names.append(label)
 
     with gr.Blocks(theme=shared.gradio_theme, analytics_enabled=False, title="Stable Diffusion") as demo:
+
+        with gr.Row(elem_id=f"page_header", variant="compact"):
+            text_input = gr.Textbox(label="Page title", elem_id="document_title", placeholder="Stable Diffusion")
+
         settings.add_quicksettings()
 
         parameters_copypaste.connect_paste_params_buttons()

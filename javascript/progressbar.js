@@ -46,20 +46,42 @@ function formatTime(secs) {
 }
 
 
-var originalAppTitle = undefined;
+let originalAppTitle = undefined;
 
 onUiLoaded(function() {
-    originalAppTitle = document.title;
+    const documentTitleInput = document.getElementById("document_title");
+
+    if (documentTitleInput) {
+        const savedTitle = window.localStorage.getItem("document_title");
+        const inputElement = documentTitleInput.querySelector('textarea');
+
+        if (savedTitle) {
+            inputElement.value = savedTitle;
+        }
+
+        inputElement.addEventListener("input", function(e) {
+            originalAppTitle = e.target.value;
+            document.title = originalAppTitle;
+            window.localStorage.setItem("document_title", originalAppTitle);
+        });
+
+        if (inputElement.value) {
+            originalAppTitle = inputElement.value;
+            document.title = originalAppTitle;
+        }
+    } else {
+        originalAppTitle = document.title;
+    }
 });
 
 function setTitle(progress) {
-    var title = originalAppTitle;
+    let title = originalAppTitle;
 
     if (opts.show_progress_in_title && progress) {
-        title = '[' + progress.trim() + '] ' + title;
+        title = title + ' | [' + progress.trim() + '] ';
     }
 
-    if (document.title != title) {
+    if (document.title !== title) {
         document.title = title;
     }
 }
